@@ -1,0 +1,38 @@
+# Just an arbitrary name
+name: First Try
+
+# Sets when it will be triggered
+on:
+    push:
+        branches: main
+    pull_request:
+        branches: main
+
+# Number of jobs where it will run in order
+# Step 1: checkout@v4: Gets the code from remote repository
+# Step 2: setup-msys2@v2: Tells the runner (remote windows from Github) to setup MSYS2
+# Step 3: Tells to use MSYS2 shell (or terminal) and compile the code
+# Step 4: Run the program with the compiled code
+jobs:
+    build:
+        runs-on: windows-latest
+
+        steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+        
+        - name: Install MSYS2
+          uses: msys2/setup-msys2@v2
+          with:
+            update: true
+            install: >-
+                mingw-w64-x86_64-gcc
+        
+        - name: Build C program
+          shell: msys2 {0}
+          run: |
+            gcc main.c -o main.exe
+        
+        - name: Run the program
+          shell: msys2 {0}
+          run: ./main.exe
