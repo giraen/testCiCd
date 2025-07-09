@@ -34,7 +34,7 @@ jobs:
         - name: Run linter
           shell: msys2 {0}
           run: |
-            clang-tidy src/main.c --I. -warnings-as-errors=* -- -I.
+            clang-tidy src/main.c -warnings-as-errors=* -- -I.
         
         - name: Build C program
           shell: msys2 {0}
