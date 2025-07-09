@@ -31,7 +31,7 @@ jobs:
         - name: Build C program
           shell: msys2 {0}
           run: |
-            gcc main.c -o main.exe
+            gcc src/main.c -o main.exe
         
         - name: Run the program
           shell: msys2 {0}
