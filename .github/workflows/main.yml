@@ -11,8 +11,9 @@ on:
 # Number of jobs where it will run in order
 # Step 1: checkout@v4: Gets the code from remote repository
 # Step 2: setup-msys2@v2: Tells the runner (remote windows from Github) to setup MSYS2
-# Step 3: Tells to use MSYS2 shell (or terminal) and compile the code
-# Step 4: Run the program with the compiled code
+# Step 3: Runs the linter
+# Step 4: Tells to use MSYS2 shell (or terminal) and compile the code
+# Step 5: Run the program with the compiled code
 jobs:
     build:
         runs-on: windows-latest
@@ -27,6 +28,13 @@ jobs:
             update: true
             install: >-
                 mingw-w64-x86_64-gcc
+                mingw-w64-x86_64-clang
+                mingw-w64-x86_64-clang-tools-extra
+        
+        - name: Run linter
+          shell: msys2 {0}
+          run: |
+            clang-tidy src/main.c --I. -warnings-as-errors=* -- -I.
         
         - name: Build C program
           shell: msys2 {0}
