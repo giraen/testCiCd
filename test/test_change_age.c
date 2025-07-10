@@ -1,5 +1,5 @@
 #include "unity.h"
-#include "..\src\my_functions\change_age.h"
+#include "../src/my_functions/change_age.h"
 
 void test_reset_age_should_set_value_to_zero(void) {
     int age = 25;

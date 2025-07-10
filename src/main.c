@@ -2,9 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include ".\my_functions\basic_ops.h"
-#include ".\my_functions\change_age.h"
-#include ".\my_functions\show_greetings.h"
+#include "./my_functions/basic_ops.h"
+#include "./my_functions/change_age.h"
+#include "./my_functions/show_greetings.h"
 
 int choice = 0;
 char name[] = "ken harvey girasol";
