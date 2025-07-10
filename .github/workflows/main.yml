@@ -26,11 +26,18 @@ jobs:
           with:
             ruby-version: '3.3'
 
+        - name: Set up Python
+          uses: actions/setup-python@v5
+          with:
+            python-version: '3.x'
+
         - name: Install build tools
           run: sudo apt update && sudo apt install -y build-essential
 
         - name: Install Ceedling and Gcovr
-          run: gem install ceedling gcovr
+          run: |
+            gem install ceedling 
+            pip install gcovr
 
         - name: Run Unit Tests and Coverage
           run: ceedling test:all gcov:all
