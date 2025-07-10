@@ -1,5 +1,5 @@
 # Just an arbitrary name
-name: First Try
+name: Unit Tests with Ceedling
 
 # Sets when it will be triggered
 on:
@@ -15,24 +15,41 @@ on:
 # Step 4: Run the program with the compiled code
 jobs:
     build:
-        runs-on: windows-latest
+        runs-on: ubuntu-latest
 
         steps:
         - name: Checkout code
           uses: actions/checkout@v4
         
-        - name: Install MSYS2
-          uses: msys2/setup-msys2@v2
+        - name: Set up Ruby
+          uses: ruby/setup-ruby@v1
           with:
-            update: true
-            install: >-
-                mingw-w64-x86_64-gcc
-        
-        - name: Build C program
-          shell: msys2 {0}
+            ruby-version: '3.3'
+
+        - name: Set up Python
+          uses: actions/setup-python@v5
+          with:
+            python-version: '3.x'
+
+        - name: Install build tools
+          run: sudo apt-get update && sudo apt-get install -y build-essential gcc
+
+        - name: Install Ceedling and Gcovr
           run: |
-            gcc src/main.c -o main.exe
+            gem install ceedling --no-document
+            pip install gcovr
+
+        - name: Run Unit Tests and Coverage
+          run: ceedling test:all gcov:all
         
-        - name: Run the program
-          shell: msys2 {0}
-          run: ./main.exe
+        - name: 📊 Publish JUnit test results to GitHub
+          uses: mikepenz/action-junit-report@v4
+          if: always()
+          with:
+            report_paths: '**/build/artifacts/test/**/*.xml'
+
+        - name: Upload HTML coverage report
+          uses: actions/upload-artifact@v4
+          with:
+            name: code-coverage
+            path: build/artifacts/gcov/**
