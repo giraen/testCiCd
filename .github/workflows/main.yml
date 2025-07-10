@@ -27,17 +27,17 @@ jobs:
             ruby-version: '3.3'
 
         - name: Install Ceedling
-          run: gem install ceedling
+          run: gem install ceedling gcovr
 
         - name: Run Unit Tests
           run: ceedling test:all gcov:all
         
-        - name: Upload JUnit Test Report
-          uses: actions/upload-artifact@v4
+        - name: 📊 Publish JUnit test results to GitHub
+          uses: mikepenz/action-junit-report@v4
+          if: always()
           with:
-            name: junit-report
-            path: build/artifacts/test/results/*.xml
-        
+            report_paths: '**/build/artifacts/test/**/*.xml'
+
         - name: Upload HTML coverage report
           uses: actions/upload-artifact@v4
           with:
