@@ -26,10 +26,13 @@ jobs:
           with:
             ruby-version: '3.3'
 
-        - name: Install Ceedling
+        - name: Install build tools
+          run: sudo apt update && sudo apt install -y build-essential
+
+        - name: Install Ceedling and Gcovr
           run: gem install ceedling gcovr
 
-        - name: Run Unit Tests
+        - name: Run Unit Tests and Coverage
           run: ceedling test:all gcov:all
         
         - name: 📊 Publish JUnit test results to GitHub
