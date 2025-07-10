@@ -1,5 +1,5 @@
 # Just an arbitrary name
-name: First Try
+name: Unit Tests with Ceedling
 
 # Sets when it will be triggered
 on:
@@ -15,24 +15,31 @@ on:
 # Step 4: Run the program with the compiled code
 jobs:
     build:
-        runs-on: windows-latest
+        runs-on: ubuntu-latest
 
         steps:
         - name: Checkout code
           uses: actions/checkout@v4
         
-        - name: Install MSYS2
-          uses: msys2/setup-msys2@v2
+        - name: Set up Ruby
+          uses: ruby/setup-ruby@v1
           with:
-            update: true
-            install: >-
-                mingw-w64-x86_64-gcc
+            ruby-version: '3.3'
+
+        - name: Install Ceedling
+          run: gem install ceedling
+
+        - name: Run Unit Tests
+          run: ceedling test:all gcov:all
         
-        - name: Build C program
-          shell: msys2 {0}
-          run: |
-            gcc src/main.c -o main.exe
+        - name: Upload JUnit Test Report
+          uses: actions/upload-artifact@v4
+          with:
+            name: junit-report
+            path: build/artifacts/test/results/*.xml
         
-        - name: Run the program
-          shell: msys2 {0}
-          run: ./main.exe
+        - name: Upload HTML coverage report
+          uses: actions/upload-artifact@v4
+          with:
+            name: code-coverage
+            path: build/artifacts/gcov/**

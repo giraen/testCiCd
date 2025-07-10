@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "show_greetings.h": "c",
+        "change_age.h": "c",
+        "basic_ops.h": "c"
+    }
+}
